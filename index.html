@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Registration System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div>
+        <h1>Welcome to the student Registration System</h1>
+        <p>To register a new student, please click the button below.</p>
+        <form >
+            <!-- studentName, studentID, emailID, contactNo -->
+            <label for="studentName">Student Name:</label>
+            <input type="text" id="studentName" name="studentName" required>
+            <br><br>
+            <label for="studentID">Student ID:</label>
+            <input type="text" id="studentID" name="studentID" required>
+            <br><br>
+            <label for="emailID">Email:</label>
+            <input type="email" id="emailID" name="emailID" required>
+            <br><br>
+            <label for="contactNo">Contact No.:</label>
+            <input type="text" id="contactNo" name="contactNo" required>
+            <br><br>
+            <button type="submit" id="submitButton">Register Student</button>
+
+        </form>
+    </div>
+    <div>
+
+        <!-- Demo table which will be populated with student data after registration -->
+        <h2>Registered Students</h2>
+        <table id="studentTable">
+            <thead>
+            <tr>
+                <th>Student Name</th>
+                <th>Student ID</th>
+                <th>Email</th>
+                <th>Contact No.</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Student rows will be dynamically populated from Local Storage -->
+            </tbody>
+        </table>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
