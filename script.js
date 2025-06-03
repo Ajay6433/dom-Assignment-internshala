@@ -1,8 +1,11 @@
 const submitButton = document.getElementById("submitButton");
 submitButton.addEventListener("click", registeringStudentData);
 
+// This function handles adding or updating student data in localStorage
 function registeringStudentData(event) {
   event.preventDefault();
+
+  // Collecting form values from input fields
   const studentName = document.getElementById("studentName").value;
   const studentID = document.getElementById("studentID").value;
   const emailID = document.getElementById("emailID").value;
@@ -14,14 +17,14 @@ function registeringStudentData(event) {
     return;
   }
 
-  // Validate that studentName is not empty and only contains letters and spaces
+  // Validating that studentName is not empty and only contains letters and spaces
   const namePattern = /^[a-zA-Z\s]+$/;
   if (!namePattern.test(studentName)) {
     alert("Student name must contain only letters and spaces.");
     return;
   }
 
-  // Validate that studentID is a number, not empty, and not a floating point number
+  // Validating that studentID is a number, not empty, and not a floating point number
   if (studentID.trim() === "") {
     alert("Student ID cannot be empty.");
     return;
@@ -35,21 +38,21 @@ function registeringStudentData(event) {
     return;
   }
 
-  // Validate email format
+  // Validating email format
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailPattern.test(emailID)) {
     alert("Please enter a valid email address.");
     return;
   }
 
-  // Validate contact number (10 digits)
+  // Validating contact number (10 digits)
   const contactPattern = /^\d{10}$/;
   if (!contactPattern.test(contactNo)) {
     alert("Contact No. must be a 10-digit number.");
     return;
   }
 
-  // Storing the student data in LocalStorage in the form of Array of objects
+  // Preparing student data object
   const studentData = {
     name: studentName,
     id: studentID,
@@ -57,60 +60,83 @@ function registeringStudentData(event) {
     contact: contactNo,
   };
 
-  const studentDataArray = localStorage.getItem("students");
-  localStorage.setItem(
-    "students",
-    JSON.stringify(
-      studentDataArray
-        ? [...JSON.parse(studentDataArray), studentData]
-        : [studentData]
-    )
-  );
+  // Get existing students from localStorage or initialize empty array
+  let students = JSON.parse(localStorage.getItem("students")) || [];
 
-  // Storing individual student data in LocalStorage
-  localStorage.setItem("studentName", studentData.name);
-  localStorage.setItem("studentID", studentData.id);
-  localStorage.setItem("emailID", studentData.email);
-  localStorage.setItem("contactNo", studentData.contact);
+  // Check if student with same ID exists (for update after edit)
+  const existingIndex = students.findIndex((s) => s.id === studentID);
+  if (existingIndex !== -1) {
+    students[existingIndex] = studentData; // Update existing
+  } else {
+    students.push(studentData); // Add new
+  }
 
-  const tableBody = document.querySelector("tbody");
-  tableBody.innerHTML = ""; // Clear previous rows to avoid duplicates
+  // Save updated students array to localStorage
+  localStorage.setItem("students", JSON.stringify(students));
 
-  const students = JSON.parse(localStorage.getItem("students")) || [];
-  students.forEach((student) => {
-    const row = document.createElement("tr");
-    row.innerHTML = `
-                        <td>${student.name}</td>
-                        <td>${student.id}</td>
-                        <td>${student.email}</td>
-                        <td>${student.contact}</td>
-                `;
-    tableBody.appendChild(row);
-  });
+  // Refreshing the table to show updated data
+  renderStudentTable();
 
   // Clear the input fields after submission
   document.getElementById("studentName").value = "";
   document.getElementById("studentID").value = "";
+  document.getElementById("studentID").readOnly = false; 
   document.getElementById("emailID").value = "";
   document.getElementById("contactNo").value = "";
 
   console.log(studentName, studentID, emailID, contactNo);
 }
 
-// default load values from localStorage when the page loads
-window.onload = function () {
+// This function renders the student table from localStorage
+function renderStudentTable() {
   const tableBody = document.querySelector("tbody");
-  tableBody.innerHTML = ""; // Clear previous rows
+  tableBody.innerHTML = ""; 
 
   const students = JSON.parse(localStorage.getItem("students")) || [];
   students.forEach((student) => {
     const row = document.createElement("tr");
     row.innerHTML = `
-                        <td>${student.name}</td>
-                        <td>${student.id}</td>
-                        <td>${student.email}</td>
-                        <td>${student.contact}</td>
-                `;
+        <td>${student.name}</td>
+        <td>${student.id}</td>
+        <td>${student.email}</td>
+        <td>${student.contact}</td>
+        <td>
+            <div class="action-buttons">
+                <button type="button" onclick="editStudentData('${student.id}')">Edit</button>
+                <button type="button" onclick="deleteStudentData('${student.id}')">Delete</button>
+            </div>
+        </td>
+    `;
     tableBody.appendChild(row);
   });
+}
+
+// On page load, showing all students in the table
+window.onload = function () {
+  renderStudentTable();
 };
+
+// This function allows user to edit existing student data
+function editStudentData(studentID) {
+  const students = JSON.parse(localStorage.getItem("students")) || [];
+  const student = students.find((s) => s.id === studentID);
+
+  if (student) {
+    document.getElementById("studentName").value = student.name;
+    document.getElementById("studentID").value = student.id;
+    document.getElementById("studentID").readOnly = true; // Prevent editing ID
+    document.getElementById("emailID").value = student.email;
+    document.getElementById("contactNo").value = student.contact;
+  } else {
+    alert("Student not found.");
+  }
+}
+
+// This function allows user to delete existing student data
+function deleteStudentData(studentID) {
+  let students = JSON.parse(localStorage.getItem("students")) || [];
+  students = students.filter((s) => s.id !== studentID);
+  localStorage.setItem("students", JSON.stringify(students));
+  renderStudentTable(); //It refreshes the table after deletion
+  alert("Student data deleted successfully.");
+}

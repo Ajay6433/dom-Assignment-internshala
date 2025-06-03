@@ -1,55 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="A simple student registration system that allows users to register students and view the list of registered students."
+    />
+    <meta
+      name="keywords"
+      content="student registration, student management, web application, local storage"
+    />
+    <meta name="author" content="Ajay Khan" />
     <title>Student Registration System</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
+    <link rel="stylesheet" href="style.css" />
+  </head>
 
-<body>
-    <div>
-        <h1>Welcome to the student Registration System</h1>
-        <p>To register a new student, please click the button below.</p>
-        <form >
-            <!-- studentName, studentID, emailID, contactNo -->
-            <label for="studentName">Student Name:</label>
-            <input type="text" id="studentName" name="studentName" required>
-            <br><br>
-            <label for="studentID">Student ID:</label>
-            <input type="text" id="studentID" name="studentID" required>
-            <br><br>
-            <label for="emailID">Email:</label>
-            <input type="email" id="emailID" name="emailID" required>
-            <br><br>
-            <label for="contactNo">Contact No.:</label>
-            <input type="text" id="contactNo" name="contactNo" required>
-            <br><br>
-            <button type="submit" id="submitButton">Register Student</button>
-
+  <body>
+    <header class="page-header">
+      <h1 class="header-title">Student Registration System</h1>
+      <p class="header-description">
+        Register students and manage their information easily.
+      </p>
+    </header>
+    <section class="main-container">
+      <div class="form-section">
+        <h2>Register a New Student</h2>
+        <form>
+          <label for="studentName">Student Name:</label>
+          <input type="text" id="studentName" name="studentName" required />
+          <label for="studentID">Student ID:</label>
+          <input type="text" id="studentID" name="studentID" required />
+          <label for="emailID">Email:</label>
+          <input type="email" id="emailID" name="emailID" required />
+          <label for="contactNo">Contact No.:</label>
+          <input type="text" id="contactNo" name="contactNo" required />
+          <button type="submit" id="submitButton">Register Student</button>
         </form>
-    </div>
-    <div>
-
-        <!-- Demo table which will be populated with student data after registration -->
+      </div>
+      <div class="table-section">
         <h2>Registered Students</h2>
         <table id="studentTable">
-            <thead>
+          <thead>
             <tr>
-                <th>Student Name</th>
-                <th>Student ID</th>
-                <th>Email</th>
-                <th>Contact No.</th>
+              <th>Student Name</th>
+              <th>Student ID</th>
+              <th>Email</th>
+              <th>Contact No.</th>
+              <th>Actions</th>
             </tr>
-            </thead>
-            <tbody>
-            <!-- Student rows will be dynamically populated from Local Storage -->
-            </tbody>
+          </thead>
+          <tbody>
+            <!-- Student rows will be populated using DOM here from the Local Storage -->
+          </tbody>
         </table>
-    </div>
-
+      </div>
+    </section>
     <script src="script.js"></script>
-</body>
-
+  </body>
 </html>
